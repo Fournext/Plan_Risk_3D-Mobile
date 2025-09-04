@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_plan_risk_3d/config/theme_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/plan_premiun.dart';
+import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/soporte_ayuda-dart';
 
 class ConfigOptionsCard extends StatelessWidget {
   const ConfigOptionsCard({super.key});
@@ -64,9 +67,12 @@ class ConfigOptionsCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const AnimatedOption(
+                     AnimatedOption(
                       icon: Icons.dark_mode,
                       label: 'Modo Oscuro',
+                      onTap: () {
+    Get.find<ThemeController>().toggleTheme(); // 👈 esto activa el cambio
+  },
                     ),
                     const Divider(height: 1),
                     AnimatedOption(
@@ -84,9 +90,17 @@ class ConfigOptionsCard extends StatelessWidget {
                     const Divider(height: 1),
                     const AnimatedOption(icon: Icons.language, label: 'Idioma'),
                     const Divider(height: 1),
-                    const AnimatedOption(
+                    AnimatedOption(
                       icon: Icons.help_outline,
                       label: 'Ayuda & Soporte',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const HelpSupportScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

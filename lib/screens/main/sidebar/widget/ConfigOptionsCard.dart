@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/plan_premiun.dart';
 
 class ConfigOptionsCard extends StatelessWidget {
   const ConfigOptionsCard({super.key});
@@ -61,23 +62,30 @@ class ConfigOptionsCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Column(
-                  children: const [
-                    AnimatedOption(icon: Icons.dark_mode, label: 'Modo Oscuro'),
-                    Divider(height: 1),
-                    AnimatedOption(
-                      icon: Icons.notifications,
-                      label: 'Plan Premium',
-                    ),
-                    Divider(height: 1),
-                    AnimatedOption(icon: Icons.language, label: 'Idioma'),
-                    Divider(height: 1),
-                    AnimatedOption(
-                      icon: Icons.help_outline,
-                      label: 'Ayuda & Soporte',
-                    ),
-                  ],
-                ),
+            child: Column(
+  children: [
+    const AnimatedOption(icon: Icons.dark_mode, label: 'Modo Oscuro'),
+    const Divider(height: 1),
+    AnimatedOption(
+      icon: Icons.notifications,
+      label: 'Plan Premium',
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const PlanPremiumScreen()),
+        );
+      },
+    ),
+    const Divider(height: 1),
+    const AnimatedOption(icon: Icons.language, label: 'Idioma'),
+    const Divider(height: 1),
+    const AnimatedOption(
+      icon: Icons.help_outline,
+      label: 'Ayuda & Soporte',
+    ),
+  ],
+),
+
               ),
 
               const SizedBox(height: 30),
@@ -102,8 +110,9 @@ class ConfigOptionsCard extends StatelessWidget {
 class AnimatedOption extends StatefulWidget {
   final IconData icon;
   final String label;
+   final VoidCallback? onTap; // 
 
-  const AnimatedOption({super.key, required this.icon, required this.label});
+  const AnimatedOption({super.key, required this.icon, required this.label, this.onTap});
 
   @override
   State<AnimatedOption> createState() => _AnimatedOptionState();
@@ -123,11 +132,11 @@ class _AnimatedOptionState extends State<AnimatedOption> {
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: () => setState(() => _scale = 1.0),
-      onTap: () {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Clicked: ${widget.label}')));
-      },
+    onTap: () {
+  setState(() => _scale = 1.0);
+  widget.onTap?.call(); // Llama a la función si fue pasada
+},
+
       child: AnimatedScale(
         scale: _scale,
         duration: const Duration(milliseconds: 100),

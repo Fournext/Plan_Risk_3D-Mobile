@@ -67,7 +67,7 @@ class ConfigOptionsCard extends StatelessWidget {
                     Divider(height: 1),
                     AnimatedOption(
                       icon: Icons.notifications,
-                      label: 'Notificaciones',
+                      label: 'Plan Premium',
                     ),
                     Divider(height: 1),
                     AnimatedOption(icon: Icons.language, label: 'Idioma'),

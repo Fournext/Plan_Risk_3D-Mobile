@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_plan_risk_3d/screens/dasboard/view/dashboard_screen.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/ConfigOptionsCard.dart';
+import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/DiseñoIA.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/view/sidebar.dart';
 import 'package:mobile_plan_risk_3d/screens/view/glb_viewer_page.dart';
 
@@ -26,9 +27,10 @@ class _MainScreenState extends State<MainScreen> {
     DashboardScreen(),
     Center(child: Text('Dashboard / Estadísticas')),
     ProfileScreen(),
-    Center(child: Text('Diseño IA')),
+   // Center(child: Text('Diseño IA')),
+     IADisenoScreen(),
     //Center(child: Text('Configuraciones')),
-   const ConfigOptionsCard()
+    ConfigOptionsCard() , 
   ];
 
   void _onItemSelected(int index) {

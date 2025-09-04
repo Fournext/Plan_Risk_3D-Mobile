@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- vamara  -->
+        <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:usesCleartextTraffic="true"
         android:label="mobile_plan_risk_3d"

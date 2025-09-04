@@ -55,7 +55,7 @@ final theme = Theme.of(context);
           ),
           _SidebarItem(
             icon: Icons.warning,
-            label: 'Risk Analysis',
+            label: 'Mis Modelos ',
             isSelected: selectedIndex == 2,
             color: Colors.redAccent,
             onTap: () => onItemSelected(2),

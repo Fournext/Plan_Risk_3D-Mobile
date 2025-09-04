@@ -62,30 +62,34 @@ class ConfigOptionsCard extends StatelessWidget {
                     ),
                   ],
                 ),
-            child: Column(
-  children: [
-    const AnimatedOption(icon: Icons.dark_mode, label: 'Modo Oscuro'),
-    const Divider(height: 1),
-    AnimatedOption(
-      icon: Icons.notifications,
-      label: 'Plan Premium',
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const PlanPremiumScreen()),
-        );
-      },
-    ),
-    const Divider(height: 1),
-    const AnimatedOption(icon: Icons.language, label: 'Idioma'),
-    const Divider(height: 1),
-    const AnimatedOption(
-      icon: Icons.help_outline,
-      label: 'Ayuda & Soporte',
-    ),
-  ],
-),
-
+                child: Column(
+                  children: [
+                    const AnimatedOption(
+                      icon: Icons.dark_mode,
+                      label: 'Modo Oscuro',
+                    ),
+                    const Divider(height: 1),
+                    AnimatedOption(
+                      icon: Icons.notifications,
+                      label: 'Plan Premium',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PlanPremiumScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(height: 1),
+                    const AnimatedOption(icon: Icons.language, label: 'Idioma'),
+                    const Divider(height: 1),
+                    const AnimatedOption(
+                      icon: Icons.help_outline,
+                      label: 'Ayuda & Soporte',
+                    ),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 30),
@@ -110,54 +114,92 @@ class ConfigOptionsCard extends StatelessWidget {
 class AnimatedOption extends StatefulWidget {
   final IconData icon;
   final String label;
-   final VoidCallback? onTap; // 
+  final VoidCallback? onTap;
 
-  const AnimatedOption({super.key, required this.icon, required this.label, this.onTap});
+  const AnimatedOption({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
 
   @override
   State<AnimatedOption> createState() => _AnimatedOptionState();
 }
 
-class _AnimatedOptionState extends State<AnimatedOption> {
+class _AnimatedOptionState extends State<AnimatedOption>
+    with SingleTickerProviderStateMixin {
   double _scale = 1.0;
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    );
+
+    _fadeController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
 
   void _onTapDown(_) => setState(() => _scale = 0.97);
   void _onTapUp(_) => setState(() => _scale = 1.0);
 
   @override
   Widget build(BuildContext context) {
-    const iconColor = Color(0xFF3B82F6);
+    const iconColor = Color(0xFF3B82F6); // azul moderno
+    const hoverColor = Color(0xFFF0F4FF); // azul claro de toque
 
-    return GestureDetector(
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: () => setState(() => _scale = 1.0),
-    onTap: () {
-  setState(() => _scale = 1.0);
-  widget.onTap?.call(); // Llama a la función si fue pasada
-},
-
-      child: AnimatedScale(
-        scale: _scale,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(widget.icon, color: iconColor, size: 24),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  widget.label,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF1E293B),
-                    fontWeight: FontWeight.w500,
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: GestureDetector(
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: () => setState(() => _scale = 1.0),
+        onTap: () {
+          setState(() => _scale = 1.0);
+          widget.onTap?.call();
+        },
+        child: AnimatedScale(
+          scale: _scale,
+          duration: const Duration(milliseconds: 100),
+          child: Container(
+            decoration: BoxDecoration(
+              color: hoverColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(widget.icon, color: iconColor, size: 24),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    widget.label,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF1E293B),
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
-              ),
-              const Icon(Icons.chevron_right_rounded, color: Colors.grey),
-            ],
+                const Icon(Icons.chevron_right_rounded, color: Colors.grey),
+              ],
+            ),
           ),
         ),
       ),

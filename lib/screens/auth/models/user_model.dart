@@ -1,25 +1,35 @@
+// lib/screens/auth/models/user_model.dart
 class UserModel {
-  final String name;
-  final String email;
-  final String password;
+  final int? id;            // <-- opcional (viene del backend)
+  final String nombre;      // requerido para registro / perfil
+  final String email;       // requerido
+  final String? password;   // <-- opcional (no regresa del backend)
 
-  UserModel({
-    required this.name,
+  const UserModel({
+    this.id,
+    required this.nombre,
     required this.email,
-    required this.password,
+    this.password,
   });
 
-  // Si quieres guardar en JSON / enviar a API
-  Map<String, dynamic> toJson() => {
-    'name': name,
-    'email': email,
-    'password': password,
-  };
+  /// Para registro
+  Map<String, dynamic> toJsonRegistro() => {
+        'nombre': nombre,
+        'email': email,
+        'password': password, // aquí sí debe venir
+      };
 
-  // Si quieres construir desde JSON
+  /// Para login
+  Map<String, dynamic> toJsonLogin() => {
+        'email': email,
+        'password': password, // aquí sí debe venir
+      };
+
+  /// Construir desde la respuesta del backend
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    name: json['name'] ?? '',
-    email: json['email'] ?? '',
-    password: json['password'] ?? '',
-  );
+        id: json['id'] as int?,
+        nombre: (json['nombre'] ?? '') as String,
+        email: (json['email'] ?? '') as String,
+        // normalmente el backend NO devuelve password → mantenla null
+      );
 }

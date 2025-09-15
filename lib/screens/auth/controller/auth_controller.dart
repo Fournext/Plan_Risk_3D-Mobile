@@ -1,10 +1,8 @@
-// lib/screens/auth/service/auth_controller.dart  (o donde lo tengas)
-import 'dart:convert';
+/* // lib/controllers/auth_controller.dart
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mobile_plan_risk_3d/api/auth_service.dart';
 import 'package:mobile_plan_risk_3d/routes/routes.dart';
-
 import '../models/user_model.dart';
 
 class AuthController extends GetxController {
@@ -18,32 +16,16 @@ class AuthController extends GetxController {
   bool get isFirstTime => _isFirstTime.value;
   bool get isLoggedIn => _isLogged.value || accessToken != null;
 
-  // Usuario actual (para pantalla de perfil)
+  // Estado del usuario actual
   final Rxn<UserModel> currentUser = Rxn<UserModel>();
-
-  // inyección
-  final String baseUrl;
+  final String baseUrl; // inyección
   AuthController({required this.baseUrl});
 
   @override
   void onInit() {
     _api = AuthService(baseUrl);
-
-    // flags
     _isFirstTime.value = _box.read('isFirstTime') ?? true;
     _isLogged.value    = _box.read('isLoggedIn')  ?? false;
-
-    // restaurar usuario de storage si existe
-    final raw = _box.read('usuario');
-    if (raw != null) {
-      // puede haberse guardado como Map o como String JSON
-      if (raw is Map) {
-        currentUser.value = UserModel.fromJson(Map<String, dynamic>.from(raw));
-      } else if (raw is String) {
-        currentUser.value = UserModel.fromJson(jsonDecode(raw) as Map<String, dynamic>);
-      }
-    }
-
     super.onInit();
   }
 
@@ -54,14 +36,6 @@ class AuthController extends GetxController {
   void setFirstTimeDone() {
     _isFirstTime.value = false;
     _box.write('isFirstTime', false);
-  }
-
-  // Guardar usuario en RAM + storage
-  void _saveUser(dynamic usuarioJson) {
-    if (usuarioJson == null) return;
-    final map = Map<String, dynamic>.from(usuarioJson as Map);
-    currentUser.value = UserModel.fromJson(map);
-    _box.write('usuario', map); // guardamos como Map (GetStorage lo soporta)
   }
 
   // ---------- API ----------
@@ -89,14 +63,11 @@ class AuthController extends GetxController {
 
       if (res.isOk && res.body is Map) {
         final data = res.body as Map;
-
         _box.write('access',  data['access']);
         _box.write('refresh', data['refresh']);
+        _box.write('usuario', data['usuario']);
         _box.write('isLoggedIn', true);
         _isLogged.value = true;
-
-        // usuario del backend → RAM + storage
-        _saveUser(data['usuario']);
 
         Get.offAllNamed(AppRoutes.home);
       } else {
@@ -108,62 +79,31 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-
   Future<void> logout() async {
     try {
       final token = accessToken;
       if (token != null) {
         await _api.logout(token);
       }
-    } catch (_) {
-      // Silencio: el logout del backend es opcional.
-    }
-    // Limpia todo menos el flag de primera vez
-    final firstTime = _box.read('isFirstTime') ?? false;
-    await _box.erase();
-    _box.write('isFirstTime', firstTime);
-
-    currentUser.value = null;
+    } catch (_) {}
+    _box.erase();
     _isLogged.value = false;
     Get.offAllNamed(AppRoutes.signin);
   }
-
-  /// PATCH /api/users/usuarios/me/  (nombre y/o password)
-/// Actualiza nombre, email y/o password contra PATCH /usuarios/me/
-  Future<void> updateProfile({String? nombre, String? email, String? password}) async {
+  Future<void> updateProfile({String? nombre, String? password}) async {
     final t = accessToken;
-    if (t == null) {
-      Get.snackbar('Sesión', 'Vuelve a iniciar sesión');
-      return;
-    }
+    if (t == null) return;
     final body = <String, dynamic>{};
     if (nombre != null && nombre.trim().isNotEmpty) body['nombre'] = nombre.trim();
-    if (email  != null && email.trim().isNotEmpty)  body['email']  = email.trim();
-    if (password != null && password.isNotEmpty)    body['password'] = password;
+    if (password != null && password.isNotEmpty) body['password'] = password;
 
-    if (body.isEmpty) {
-      Get.snackbar('Sin cambios', 'No hay datos para actualizar');
-      return;
-    }
-    // validación rápida de email
-    if (body['email'] != null && !GetUtils.isEmail(body['email'])) {
-      Get.snackbar('Correo inválido', 'Revisa el formato del email');
-      return;
-    }
-
-    try {
-      isLoading.value = true;
-      final res = await _api.updateMe(t, body);
-      if (res.isOk && res.body is Map) {
-        _saveUser(res.body);
-        Get.snackbar('Listo', 'Perfil actualizado');
-      } else {
-        Get.snackbar('Error', res.bodyString ?? 'No se pudo actualizar');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading.value = false;
+    final res = await _api.updateMe(t, body);
+    if (res.isOk && res.body is Map) {
+      currentUser.value = UserModel.fromJson(res.body);
+      Get.snackbar('Guardado', 'Perfil actualizado');
+    } else {
+      Get.snackbar('Error', res.bodyString ?? 'No se pudo actualizar');
     }
   }
 }
+ */

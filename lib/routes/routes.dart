@@ -21,7 +21,7 @@ class AppRoutes {
     GetPage(name: onboarding, page: () => const OnboardingScreen()),
     GetPage(name: signin, page: () => SigninScreen()),
     GetPage(name: signup, page: () => SignUpScreen()),
-    GetPage(name: forgot, page: () => ForgotPasswordScreen()),
+/*     GetPage(name: forgot, page: () => ForgotPasswordScreen()), */
     GetPage(name: home, page: () => MainScreen()),
     GetPage(name: viewer, page: () => const GlbViewerPage()),
   ];

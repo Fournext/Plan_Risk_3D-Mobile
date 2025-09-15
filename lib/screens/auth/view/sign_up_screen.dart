@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_plan_risk_3d/screens/auth/models/user_model.dart';
+import 'package:mobile_plan_risk_3d/screens/auth/service/auth_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/widgets/input/custom_textfield.dart';
 
 import '../../../../config/app_textstyles.dart';
-import '../service/auth_controller.dart';
 import '../../../routes/routes.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -32,16 +32,14 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              Text(
-                'Crear Cuenta',
+              Text('Crear Cuenta',
                 style: AppTextStyle.withColor(
                   AppTextStyle.h1,
                   Theme.of(context).textTheme.bodyLarge!.color!,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'Regístrate para comenzar',
+              Text('Regístrate para comenzar',
                 style: AppTextStyle.withColor(
                   AppTextStyle.bodyLarge,
                   isDark ? Colors.grey[400]! : Colors.grey[600]!,
@@ -81,7 +79,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              CustomTextfield(
+            /*   CustomTextfield(
                 label: 'Confirmar contraseña',
                 prefixIcon: Icons.lock_outlined,
                 keyboardType: TextInputType.visiblePassword,
@@ -92,39 +90,35 @@ class SignUpScreen extends StatelessWidget {
                   if (v != _passwordController.text) return 'Las contraseñas no coinciden';
                   return null;
                 },
-              ),
+              ), */
               const SizedBox(height: 24),
 
-            SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: () {
-      final user = UserModel(
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
-
-      Get.find<AuthController>().register(user);
-      Get.offAllNamed(AppRoutes.home);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Theme.of(context).primaryColor,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
-    child: Text(
-      'Registrarse',
-      style: AppTextStyle.withColor(AppTextStyle.buttonMedium, Colors.white),
-    ),
-  ),
-),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    final user = UserModel(
+                      nombre: _nameController.text.trim(),
+                      email: _emailController.text.trim(),
+                      password: _passwordController.text,
+                    );
+                    Get.find<AuthController>().register(user);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: Text('Registrarse',
+                    style: AppTextStyle.withColor(AppTextStyle.buttonMedium, Colors.white),
+                  ),
+                ),
+              ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '¿Ya tienes una cuenta? ',
+                  Text('¿Ya tienes una cuenta? ',
                     style: AppTextStyle.withColor(
                       AppTextStyle.bodyMedium,
                       isDark ? Colors.grey[400]! : Colors.grey[600]!,
@@ -132,8 +126,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => Get.offNamed(AppRoutes.signin),
-                    child: Text(
-                      'Iniciar sesión',
+                    child: Text('Iniciar sesión',
                       style: AppTextStyle.withColor(
                         AppTextStyle.buttonMedium,
                         Theme.of(context).primaryColor,

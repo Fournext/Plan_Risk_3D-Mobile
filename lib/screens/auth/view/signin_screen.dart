@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_plan_risk_3d/screens/auth/models/user_model.dart';
+import 'package:mobile_plan_risk_3d/screens/auth/service/auth_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/widgets/input/custom_textfield.dart';
-
-import '../../../../config/app_textstyles.dart';
-import '../service/auth_controller.dart';
+import '../../../config/app_textstyles.dart';
 import '../../../routes/routes.dart';
 
 class SigninScreen extends StatelessWidget {
@@ -25,16 +24,14 @@ class SigninScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              Text(
-                '¡Bienvenido de nuevo!',
+              Text('¡Bienvenido de nuevo!',
                 style: AppTextStyle.withColor(
                   AppTextStyle.h1,
                   Theme.of(context).textTheme.bodyLarge!.color!,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'Inicia sesión para continuar.',
+              Text('Inicia sesión para continuar.',
                 style: AppTextStyle.withColor(
                   AppTextStyle.bodyLarge,
                   isDark ? Colors.grey[400]! : Colors.grey[600]!,
@@ -69,8 +66,7 @@ class SigninScreen extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => Get.toNamed(AppRoutes.forgot),
-                  child: Text(
-                    '¿Olvidaste tu contraseña?',
+                  child: Text('¿Olvidaste tu contraseña?',
                     style: AppTextStyle.withColor(
                       AppTextStyle.buttonMedium,
                       Theme.of(context).primaryColor,
@@ -89,8 +85,7 @@ class SigninScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: Text(
-                    'Iniciar sesión',
+                  child: Text('Iniciar sesión',
                     style: AppTextStyle.withColor(AppTextStyle.buttonMedium, Colors.white),
                   ),
                 ),
@@ -100,8 +95,7 @@ class SigninScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "¿No tienes una cuenta?",
+                  Text("¿No tienes una cuenta?",
                     style: AppTextStyle.withColor(
                       AppTextStyle.bodyMedium,
                       isDark ? Colors.grey[400]! : Colors.grey[600]!,
@@ -109,8 +103,7 @@ class SigninScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => Get.toNamed(AppRoutes.signup),
-                    child: Text(
-                      'Regístrate',
+                    child: Text('Regístrate',
                       style: AppTextStyle.withColor(
                         AppTextStyle.buttonMedium,
                         Theme.of(context).primaryColor,
@@ -126,17 +119,12 @@ class SigninScreen extends StatelessWidget {
     );
   }
 
- void _handleSignIn() {
-  final user = UserModel(
-    name: '', // No se necesita para login
-    email: _emailController.text.trim(),
-    password: _passwordController.text,
-  );
-
-  final auth = Get.find<AuthController>();
-  auth.login(user); // pasamos el modelo
-  Get.offAllNamed(AppRoutes.home);
-}
-
-
+  void _handleSignIn() {
+    final user = UserModel(
+      nombre: '',
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+    Get.find<AuthController>().login(user);
+  }
 }

@@ -31,7 +31,7 @@ class AuthController extends GetxController {
 
     // flags
     _isFirstTime.value = _box.read('isFirstTime') ?? true;
-    _isLogged.value    = _box.read('isLoggedIn')  ?? false;
+    _isLogged.value = _box.read('isLoggedIn') ?? false;
 
     // restaurar usuario de storage si existe
     final raw = _box.read('usuario');
@@ -40,7 +40,9 @@ class AuthController extends GetxController {
       if (raw is Map) {
         currentUser.value = UserModel.fromJson(Map<String, dynamic>.from(raw));
       } else if (raw is String) {
-        currentUser.value = UserModel.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+        currentUser.value = UserModel.fromJson(
+          jsonDecode(raw) as Map<String, dynamic>,
+        );
       }
     }
 
@@ -48,7 +50,7 @@ class AuthController extends GetxController {
   }
 
   // ---------- storage helpers ----------
-  String? get accessToken  => _box.read('access');
+  String? get accessToken => _box.read('access');
   String? get refreshToken => _box.read('refresh');
 
   void setFirstTimeDone() {
@@ -71,7 +73,9 @@ class AuthController extends GetxController {
       final res = await _api.register(user.toJsonRegistro());
       if (res.isOk) {
         // login automático
-        await login(UserModel(nombre: '', email: user.email, password: user.password));
+        await login(
+          UserModel(nombre: '', email: user.email, password: user.password),
+        );
       } else {
         Get.snackbar('Error', res.bodyString ?? 'Error al registrar');
       }
@@ -90,7 +94,7 @@ class AuthController extends GetxController {
       if (res.isOk && res.body is Map) {
         final data = res.body as Map;
 
-        _box.write('access',  data['access']);
+        _box.write('access', data['access']);
         _box.write('refresh', data['refresh']);
         _box.write('isLoggedIn', true);
         _isLogged.value = true;
@@ -99,8 +103,10 @@ class AuthController extends GetxController {
         _saveUser(data['usuario']);
 
         Get.offAllNamed(AppRoutes.home);
+        print('Login exitoso: ${res.bodyString}');
       } else {
         Get.snackbar('Credenciales', 'Email o contraseña inválidos');
+        print('Login fallido: ${res.statusCode} - ${res.bodyString}');
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -128,42 +134,46 @@ class AuthController extends GetxController {
     Get.offAllNamed(AppRoutes.signin);
   }
 
-  /// PATCH /api/users/usuarios/me/  (nombre y/o password)
-/// Actualiza nombre, email y/o password contra PATCH /usuarios/me/
-  Future<void> updateProfile({String? nombre, String? email, String? password}) async {
-    final t = accessToken;
-    if (t == null) {
-      Get.snackbar('Sesión', 'Vuelve a iniciar sesión');
-      return;
-    }
-    final body = <String, dynamic>{};
-    if (nombre != null && nombre.trim().isNotEmpty) body['nombre'] = nombre.trim();
-    if (email  != null && email.trim().isNotEmpty)  body['email']  = email.trim();
-    if (password != null && password.isNotEmpty)    body['password'] = password;
+// -------------------updateprofile 
 
-    if (body.isEmpty) {
-      Get.snackbar('Sin cambios', 'No hay datos para actualizar');
-      return;
-    }
-    // validación rápida de email
-    if (body['email'] != null && !GetUtils.isEmail(body['email'])) {
-      Get.snackbar('Correo inválido', 'Revisa el formato del email');
-      return;
-    }
-
-    try {
-      isLoading.value = true;
-      final res = await _api.updateMe(t, body);
-      if (res.isOk && res.body is Map) {
-        _saveUser(res.body);
-        Get.snackbar('Listo', 'Perfil actualizado');
-      } else {
-        Get.snackbar('Error', res.bodyString ?? 'No se pudo actualizar');
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading.value = false;
-    }
+Future<void> updateProfile({String? nombre, String? password}) async {
+  final token = accessToken;
+  if (token == null) {
+    Get.snackbar('Error', 'Token no encontrado, inicia sesión de nuevo');
+    return;
   }
+
+  final body = <String, dynamic>{};
+  if (nombre != null) body['nombre'] = nombre;
+  if (password != null) body['password'] = password;
+
+  try {
+    final res = await _api.updateProfile(token, body);
+
+    if (res.isOk && res.body is Map) {
+      final data = res.body as Map<String, dynamic>;
+      currentUser.value = UserModel.fromJson(data);
+      _box.write('usuario', data);
+      Get.snackbar('Éxito', 'Perfil actualizado correctamente');
+    } else {
+      Get.snackbar('Error', 'No se pudo actualizar el perfil');
+    }
+  } catch (e) {
+    Get.snackbar('Error', 'Error de conexión: $e');
+  }
+}
+  // ---------- Helper para obtener token ----------
+  String? getToken() {
+    // Intenta leer el access token desde RAM o GetStorage
+    final token = accessToken;
+    if (token != null && token.isNotEmpty) {
+      return token;
+    }
+    final stored = _box.read('access');
+    if (stored != null && stored is String && stored.isNotEmpty) {
+      return stored;
+    }
+    return null;
+  }
+
 }

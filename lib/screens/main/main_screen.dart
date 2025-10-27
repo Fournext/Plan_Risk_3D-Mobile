@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_plan_risk_3d/screens/dasboard/view/dashboard_screen.dart';
+import 'package:mobile_plan_risk_3d/screens/main/planVisualizador/visualizador3dPage.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/ConfigOptionsCard.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/DiseñoIA.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/view/sidebar.dart';
@@ -10,6 +11,7 @@ import '../auth/service/auth_controller.dart';
 import '../../routes/routes.dart';
 import '../widgets/navegacion/pill_bottom_nav.dart';
 import 'perfil/profile_screen.dart';
+import 'dart:ui';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -25,7 +27,8 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = const [
     DashboardScreen(),
-    Center(child: Text('Dashboard / Estadísticas')),
+    //Center(child: Text('Dashboard / Estadísticas')),
+    Visualizador3dPage(),
     ProfileScreen(),
    // Center(child: Text('Diseño IA')),
      IADisenoScreen(),
@@ -45,18 +48,63 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: _isMobile
-          ? Drawer(
-              child: Sidebar(
-                selectedIndex: _selectedIndex,
-                onItemSelected: _onItemSelected,
-                onLogout: () {
-                  _auth.logout();
-                  Get.offAllNamed(AppRoutes.signin);
-                },
+drawer: _isMobile
+    ? Drawer(
+        width: 265,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: ClipRRect(
+          // 🔹 curva sutil en el borde derecho
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(32),
+            bottomRight: Radius.circular(32),
+          ),
+          child: Stack(
+            children: [
+              // 🔸 efecto blur de fondo (vidrio suave)
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                child: Container(
+                  color: Colors.black.withOpacity(0.05),
+                ),
               ),
-            )
-          : null,
+
+              // 🔹 cuerpo del sidebar
+              Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFBF5EE), Color(0xFFF1E8DA)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.07),
+                      blurRadius: 18,
+                      offset: const Offset(3, 4),
+                    ),
+                  ],
+                ),
+                child: Sidebar(
+                  selectedIndex: _selectedIndex,
+                  onItemSelected: (index) {
+                    _onItemSelected(index);
+                    Navigator.pop(context);
+                  },
+                  onLogout: () {
+                    _auth.logout();
+                    Get.offAllNamed(AppRoutes.signin);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+    : null,
+
+
+
       body: Row(
         children: [
           if (!_isMobile)

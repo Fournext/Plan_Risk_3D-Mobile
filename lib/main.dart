@@ -14,11 +14,8 @@ void main() async {
 
   Get.put(ThemeController());
 
-  // Selecciona la que corresponda:
-  // const baseUrl = 'http://127.0.0.1:8000';   // navegador PC
-  // const baseUrl = 'http://10.0.2.2:8000';    // emulador Android
-  const baseUrl = 'http://192.168.0.3:8000';    // dispositivo físico
-
+  const baseUrl = 'http://10.0.2.2:8000/'; // dispositivo físico
+  //const baseUrl = 'http://ec2-18-222-5-143.us-east-2.compute.amazonaws.com:8000/';
   Get.put(AuthController(baseUrl: baseUrl), permanent: true);
 
   runApp(const App());

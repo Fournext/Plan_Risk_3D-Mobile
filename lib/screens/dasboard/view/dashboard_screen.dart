@@ -36,26 +36,27 @@ class DashboardScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: const Color(0xFFFAF8F4),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           children: [
-            // realizar un baner con imagen de los serivcio que estamos oofreciendo
-            // trabajo pa seba
+            // ===== Banner superior =====
             Container(
               height: 160,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF7C4DFF), Color(0xFF2251FF)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
               child: Stack(
                 children: [
-                  // Imagen portada en el fondo completo, sin cortar el texto
+                  // Imagen de fondo
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
@@ -65,7 +66,7 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Capa oscura para mejorar contraste del texto
+                  // Gradiente de superposición
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(
@@ -74,14 +75,14 @@ class DashboardScreen extends StatelessWidget {
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
                           colors: [
-                            Colors.black.withOpacity(0.5),
+                            Colors.black.withOpacity(0.45),
                             Colors.transparent,
                           ],
                         ),
                       ),
                     ),
                   ),
-                  // Texto encima
+                  // Texto
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -99,11 +100,12 @@ class DashboardScreen extends StatelessWidget {
                             fontSize: 22,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
                         Text(
                           'Administra tus últimos modelos y proyectos.',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.white.withOpacity(0.9),
+                            fontSize: 15,
                           ),
                         ),
                       ],
@@ -113,18 +115,20 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
 
+            // ===== Título de sección =====
             Text(
               'Modelos de Prueba',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
+                color: const Color(0xFF1E293B),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            // ==== Tarjetas animadas ====
+            // ===== Tarjetas animadas =====
             ...List.generate(items.length, (i) {
               final m = items[i];
               return TweenAnimationBuilder<double>(
@@ -138,29 +142,58 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: ModelCard(
-                    model: Model3D(
-                      title: m.title,
-                      date: m.dateText,
-                      thumbnailAsset: m.thumbnailAsset,
-                    ),
-                    onTap: () {
-                      Get.to(
-                        () => ModelDetailScreen(
-                          model: ModelDetail(
-                            title: m.title,
-                            dateText: m.dateText,
-                            glbUrl: m.glbUrl,
-                          ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
                         ),
-                      );
-                    },
+                      ],
+                    ),
+                    child: ModelCard(
+                      model: Model3D(
+                        title: m.title,
+                        date: m.dateText,
+                        thumbnailAsset: m.thumbnailAsset,
+                      ),
+                      onTap: () {
+                        Get.to(
+                          () => ModelDetailScreen(
+                            model: ModelDetail(
+                              title: m.title,
+                              dateText: m.dateText,
+                              glbUrl: m.glbUrl,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               );
             }),
-            // ======== Nueva sección ========
-const MisModelosSection(),
+
+            const SizedBox(height: 30),
+
+            // ===== Sección: Mis Modelos =====
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const MisModelosSection(),
+            ),
           ],
         ),
       ),

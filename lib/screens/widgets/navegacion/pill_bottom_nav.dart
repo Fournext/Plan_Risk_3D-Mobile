@@ -32,21 +32,34 @@ class PillBottomNav extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // ===== Inicio / Dashboard =====
                 _NavBtnAnimated(
                   isActive: index == 0,
-                  activeColor: const Color(0xFFFF3859),
+                  activeColor: const Color(0xFFDC5F00),
                   icon: Icons.note_alt_rounded,
                   onTap: () => onTap(0),
                 ),
+
+                // ===== Visualizador 3D =====
                 _NavBtnAnimated(
                   isActive: index == 1,
-                  activeColor: const Color(0xFF17153A),
+                  activeColor: const Color(0xFF1E293B),
                   icon: Icons.show_chart_rounded,
                   onTap: () => onTap(1),
                 ),
-                _NavBtnAnimated.filled(
+
+                // ===== Mis Modelos =====
+                _NavBtnAnimated(
                   isActive: index == 2,
-                  fillColor: const Color(0xFF7C4DFF),
+                  activeColor: const Color(0xFF1E293B),
+                  icon: Icons.view_in_ar_rounded,
+                  onTap: () => onTap(3),
+                ),
+
+                // ===== Perfil =====
+                _NavBtnAnimated.filled(
+                  isActive: index == 3,
+                  fillColor: const Color(0xFFDC5F00),
                   icon: Icons.person_rounded,
                   onTap: () => onTap(2),
                 ),

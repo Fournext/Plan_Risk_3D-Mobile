@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_plan_risk_3d/config/theme_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/plan_premiun.dart';
-import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/soporte_ayuda-dart';
+import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/soporte_ayuda.dart';
 
 class ConfigOptionsCard extends StatelessWidget {
   const ConfigOptionsCard({super.key});

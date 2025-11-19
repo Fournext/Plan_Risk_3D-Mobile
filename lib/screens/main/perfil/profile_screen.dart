@@ -1,10 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:mobile_plan_risk_3d/screens/auth/service/auth_controller.dart';
-import '../../../routes/routes.dart';
-import 'model/model_item.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,157 +10,221 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  List<ModelItem> _models = [];
-  bool _isLoading = true;
-  final baseUrl = 'http://10.0.2.2:8000/api/set_plan/lista_modelos/';
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchModels();
-  }
-
-Future<void> _fetchModels() async {
-  try {
-    final auth = Get.find<AuthController>();
-    final token = auth.getToken();
-    if (token == null) return;
-
-    final res = await http.get(
-      Uri.parse(baseUrl),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (res.statusCode == 200) {
-      final data = json.decode(res.body) as List;
-      setState(() {
-        _models = data.map((e) => ModelItem.fromJson(e)).toList();
-        _isLoading = false;
-      });
-    } else {
-      setState(() => _isLoading = false);
-      debugPrint('Error al obtener modelos: ${res.statusCode}');
-    }
-  } catch (e) {
-    debugPrint('❌ Error al cargar modelos: $e');
-    setState(() => _isLoading = false);
-  }
-}
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final auth = Get.find<AuthController>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6FD),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Avatar
-              TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 600),
-                tween: Tween(begin: 0.85, end: 1),
-                curve: Curves.easeOutBack,
-                builder: (_, v, child) => Transform.scale(scale: v, child: child),
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: theme.colorScheme.primary.withOpacity(.15),
-                  child: ClipOval(
-                    child: Image.asset('assets/images/avatar.png',
-                        width: 90, height: 90, fit: BoxFit.cover),
-                  ),
-                ),
+      backgroundColor: const Color(0xFFFAF8F4),
+      body: Stack(
+        children: [
+          // ===== Fondo con gradiente =====
+          Container(
+            height: 260,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xFFDC5F00), Color(0xFFFFE5C4)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              const SizedBox(height: 16),
+            ),
+          ),
 
-              // Nombre y correo
-              Obx(() {
-                final u = auth.currentUser.value;
-                final name = u?.nombre ?? 'Usuario';
-                final email = u?.email ?? '...';
-                return Column(
-                  children: [
-                    Text(name,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 24)),
-                    const SizedBox(height: 4),
-                    Text(email,
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: Colors.grey[600], fontSize: 15)),
-                  ],
-                );
-              }),
-
-              const SizedBox(height: 20),
-
-              Row(
+          // ===== Contenido =====
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => _showEditDialog(context, auth),
-                      icon: const Icon(Icons.edit, size: 18),
-                      label: const Text('Editar'),
+                  // ===== Título =====
+                  const Text(
+                    'Mi Perfil',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24,
+                      letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => auth.logout(),
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Salir'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.primaryColor,
+
+                  const SizedBox(height: 26),
+
+                  // ===== Avatar + Tarjeta blanca =====
+                  Stack(
+                    alignment: Alignment.topCenter,
+                    children: [
+                      // Fondo de tarjeta
+                      Container(
+                        margin: const EdgeInsets.only(top: 60),
+                        padding: const EdgeInsets.fromLTRB(20, 80, 20, 26),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(22),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            // ==== Datos de usuario ====
+                            Obx(() {
+                              final u = auth.currentUser.value;
+                              final name = u?.nombre ?? 'Usuario';
+                              final email =
+                                  u?.email ?? 'correo@no-disponible.com';
+
+                              return Column(
+                                children: [
+                                  Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF1E293B),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    email,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+
+                            const SizedBox(height: 30),
+
+                            // ==== Botones ====
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton.icon(
+                                    onPressed: () =>
+                                        _showEditDialog(context, auth),
+                                    icon: const Icon(Icons.edit,
+                                        color: Color(0xFFDC5F00)),
+                                    label: const Text(
+                                      'Editar',
+                                      style: TextStyle(
+                                          color: Color(0xFFDC5F00),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                          color: Color(0xFFDC5F00), width: 1.6),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14)),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () => auth.logout(),
+                                    icon: const Icon(Icons.logout,
+                                        color: Colors.white),
+                                    label: const Text(
+                                      'Salir',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFDC5F00),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(14)),
+                                      elevation: 6,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 30),
+
+                            // ==== Mensaje de seguridad ====
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 14),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF5EE),
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(
+                                    color: const Color(0xFFDC5F00), width: 1.2),
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.shield_rounded,
+                                      color: Color(0xFFDC5F00)),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Tus datos están protegidos con seguridad avanzada 🔒',
+                                      style: TextStyle(
+                                          fontSize: 13.5,
+                                          color: Color(0xFF1E293B)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+
+                      // ==== Avatar circular con borde ====
+                      Positioned(
+                        top: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 4,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundColor:
+                                const Color(0xFFDC5F00).withOpacity(.2),
+                            child: ClipOval(
+                              child: Image.asset(
+                                'assets/images/avatar.png',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-
-              const SizedBox(height: 28),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Mis Modelos',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800, fontSize: 20)),
-              ),
-              const SizedBox(height: 16),
-
-              if (_isLoading)
-                const Center(child: CircularProgressIndicator())
-              else if (_models.isEmpty)
-                const Text('No hay modelos generados aún 🧐')
-              else
-                GridView.builder(
-                  itemCount: _models.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 160,
-                    mainAxisSpacing: 14,
-                    crossAxisSpacing: 14,
-                  ),
-                  itemBuilder: (_, i) {
-                    final m = _models[i];
-                    return _ModelCard(
-                      item: m,
-                      onTap: () => Get.toNamed(AppRoutes.viewer, arguments: m.glbModel),
-                    );
-                  },
-                ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
+  // ==== Modal para editar perfil ====
   void _showEditDialog(BuildContext context, AuthController auth) {
     final u = auth.currentUser.value;
     final nameCtrl = TextEditingController(text: u?.nombre ?? '');
@@ -179,18 +239,27 @@ Future<void> _fetchModels() async {
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 12,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 16,
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
           ),
           child: ListView(
             shrinkWrap: true,
             children: [
-              const SizedBox(height: 12),
+              const Center(
+                child: Text(
+                  'Editar Perfil',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Color(0xFF1E293B)),
+                ),
+              ),
+              const SizedBox(height: 18),
               _FancyField(controller: nameCtrl, label: 'Nombre', icon: Icons.person),
               const SizedBox(height: 12),
               _FancyField(controller: emailCtrl, label: 'Correo', icon: Icons.email),
@@ -206,8 +275,16 @@ Future<void> _fetchModels() async {
                   Get.back();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor),
-                child: const Text('Guardar cambios'),
+                  backgroundColor: const Color(0xFFDC5F00),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text(
+                  'Guardar cambios',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -217,66 +294,14 @@ Future<void> _fetchModels() async {
   }
 }
 
-// --------------------------------------------------------------------------
-
-class _ModelCard extends StatelessWidget {
-  const _ModelCard({required this.item, required this.onTap});
-  final ModelItem item;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final imageUrl = "http://10.0.2.2:8000${item.planImage}";
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Ink(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            )
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Icon(Icons.image_not_supported,
-                        color: theme.primaryColor, size: 40),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text("ID #${item.id}",
-                  style: theme.textTheme.bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold)),
-              Text("Creado: ${item.createdAt.split('T').first}",
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(color: Colors.grey[600])),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
+// === Campo reutilizable ===
 class _FancyField extends StatelessWidget {
-  const _FancyField(
-      {required this.controller, required this.label, required this.icon});
+  const _FancyField({
+    required this.controller,
+    required this.label,
+    required this.icon,
+  });
+
   final TextEditingController controller;
   final String label;
   final IconData icon;
@@ -286,11 +311,18 @@ class _FancyField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon),
+        prefixIcon: Icon(icon, color: const Color(0xFFDC5F00)),
         labelText: label,
         filled: true,
         fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFDC5F00), width: 1.5),
+        ),
       ),
     );
   }

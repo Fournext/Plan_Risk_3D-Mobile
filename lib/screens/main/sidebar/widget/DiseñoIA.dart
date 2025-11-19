@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // ✅ necesario para copiar al portapapeles
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
@@ -15,7 +15,7 @@ class IADisenoScreen extends StatefulWidget {
 
 class _IADisenoScreenState extends State<IADisenoScreen>
     with SingleTickerProviderStateMixin {
-  String? _glbUrl; // ✅ URL generada del modelo GLB
+  String? _glbUrl;
   double _opacity = 0.0;
   File? _selectedImage;
   bool _isLoading = false;
@@ -99,96 +99,160 @@ class _IADisenoScreenState extends State<IADisenoScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F8FE),
+      backgroundColor: const Color(0xFFFAF8F4),
+
+      // ======= AppBar coherente con la temática =======
       appBar: AppBar(
-        backgroundColor: const Color(0xFF083D77),
-        title: const Text('IA Diseño'),
-        titleTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
+        backgroundColor: const Color(0xFFFFF8F0),
+        elevation: 2,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
+        title: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.auto_awesome_rounded, color: Color(0xFFDC5F00)),
+            SizedBox(width: 6),
+            Text(
+              'IA Diseño',
+              style: TextStyle(
+                color: Color(0xFF1E293B),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
       ),
+
+      // ======= Cuerpo =======
       body: AnimatedOpacity(
         opacity: _opacity,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: SingleChildScrollView( // ✅ por si se extiende el contenido
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 30),
-                const Text(
-                  'Tomar o seleccionar fotografía',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF083D77),
+                // ======= Encabezado =======
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: const [
+                      Text(
+                        'Genera tu modelo con Inteligencia Artificial',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF1E293B),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Toma o selecciona una fotografía del plano para generar su versión 3D automáticamente.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black54,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Captura o selecciona una imagen para generar un modelo 3D',
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                  textAlign: TextAlign.center,
-                ),
+
                 const SizedBox(height: 30),
 
-                _selectedImage != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.file(
-                          _selectedImage!,
-                          fit: BoxFit.cover,
-                          height: 220,
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/images/imagen.png',
-                        fit: BoxFit.cover,
-                        height: 220,
+                // ======= Imagen seleccionada =======
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
                       ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: _selectedImage != null
+                        ? Image.file(_selectedImage!, height: 240, fit: BoxFit.cover)
+                        : Image.asset('assets/images/imagen.png',
+                            height: 240, fit: BoxFit.cover),
+                  ),
+                ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
 
+                // ======= Botones redondos =======
                 if (_isLoading)
-                  const CircularProgressIndicator()
+                  const CircularProgressIndicator(color: Color(0xFFDC5F00))
                 else
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _circleButton(Icons.photo, Colors.blue, () {
+                      _circleButton(Icons.photo, const Color(0xFF9CA3AF), () {
                         _pickImage(ImageSource.gallery);
                       }),
-                      _circleButton(Icons.camera_alt, Colors.orange, () {
+                      _circleButton(Icons.camera_alt, const Color(0xFFDC5F00), () {
                         _pickImage(ImageSource.camera);
                       }),
-                      _circleButton(Icons.cloud_upload, Colors.green, _uploadPlan),
+                      _circleButton(Icons.cloud_upload, const Color(0xFF1E293B), _uploadPlan),
                     ],
                   ),
 
                 const SizedBox(height: 30),
 
-                // ✅ Bloque para mostrar el enlace GLB
+                // ======= URL GLB generada =======
                 if (_glbUrl != null) ...[
                   const SizedBox(height: 20),
-                  TextField(
-                    controller: TextEditingController(text: _glbUrl),
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      labelText: 'URL del modelo GLB',
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.copy),
-                        onPressed: () {
-                          Clipboard.setData(ClipboardData(text: _glbUrl!));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('📋 Enlace copiado')),
-                          );
-                        },
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: TextEditingController(text: _glbUrl),
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        labelText: 'URL del modelo GLB',
+                        labelStyle: const TextStyle(color: Color(0xFF1E293B)),
+                        border: InputBorder.none,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.copy, color: Color(0xFFDC5F00)),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: _glbUrl!));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('📋 Enlace copiado')),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -203,6 +267,7 @@ class _IADisenoScreenState extends State<IADisenoScreen>
     );
   }
 
+  // ======= Botón circular reutilizable =======
   Widget _circleButton(IconData icon, Color color, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
@@ -210,21 +275,17 @@ class _IADisenoScreenState extends State<IADisenoScreen>
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [color.withOpacity(0.8), color],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: color,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.6),
+              color: color.withOpacity(0.4),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
           ],
         ),
-        child: Icon(icon, color: Colors.white, size: 36),
+        child: Icon(icon, color: Colors.white, size: 34),
       ),
     );
   }

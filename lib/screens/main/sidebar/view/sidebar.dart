@@ -81,7 +81,7 @@ class Sidebar extends StatelessWidget {
           ),
           _SidebarItem(
             icon: Icons.layers_rounded,
-            label: 'Mis Modelos',
+            label: 'Mi Perfil',
             isSelected: selectedIndex == 2,
             accentColor: const Color(0xFFDC3C3C),
             onTap: () => onItemSelected(2),

@@ -21,18 +21,8 @@ class DashboardScreen extends StatelessWidget {
         thumbnailAsset: 'assets/images/model_office.png',
         glbUrl: 'assets/models/edificio.glb',
       ),
-      ModelInfo(
-        title: 'Análisis de Riesgo',
-        dateText: 'Abr 28, 2025',
-        thumbnailAsset: 'assets/images/model_risk.png',
-        glbUrl: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
-      ),
-      ModelInfo(
-        title: 'Traje de astronauta',
-        dateText: 'Ago 30, 2025',
-        thumbnailAsset: 'assets/images/model_risk.png',
-        glbUrl: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
-      ),
+
+
     ];
 
     return Scaffold(

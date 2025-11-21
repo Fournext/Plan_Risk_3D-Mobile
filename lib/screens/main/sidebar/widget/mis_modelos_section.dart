@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_plan_risk_3d/screens/auth/service/auth_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/main/sidebar/widget/modelo_detalle_page.dart';
 
+import '../../../../const//app_constants.dart';
+
 class MisModelosSection extends StatefulWidget {
   const MisModelosSection({super.key});
 
@@ -15,7 +17,7 @@ class MisModelosSection extends StatefulWidget {
 class _MisModelosSectionState extends State<MisModelosSection> {
   bool _loading = true;
   List<dynamic> _modelos = [];
-  final baseUrl = 'http://10.0.2.2:8000/api/set_plan/lista_modelos/';
+  final baseUrl = '${AppConstants.baseUrl}api/set_plan/lista_modelos/';
 
   @override
   void initState() {
@@ -29,9 +31,10 @@ class _MisModelosSectionState extends State<MisModelosSection> {
       final token = auth.getToken();
       if (token == null) return;
 
-      final res = await http.get(Uri.parse(baseUrl), headers: {
-        'Authorization': 'Bearer $token',
-      });
+      final res = await http.get(
+        Uri.parse(baseUrl),
+        headers: {'Authorization': 'Bearer $token'},
+      );
 
       if (res.statusCode == 200) {
         final data = json.decode(res.body) as List;
@@ -53,10 +56,12 @@ class _MisModelosSectionState extends State<MisModelosSection> {
     final theme = Theme.of(context);
 
     if (_loading) {
-      return const Center(child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: CircularProgressIndicator(),
-      ));
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     if (_modelos.isEmpty) {
@@ -89,7 +94,7 @@ class _MisModelosSectionState extends State<MisModelosSection> {
           ),
           itemBuilder: (_, i) {
             final m = _modelos[i];
-            final imageUrl = "http://10.0.2.2:8000${m['plan_image']}";
+            final imageUrl = "${AppConstants.baseUrlPacht}${m['plan_image']}";
             return InkWell(
               onTap: () => Get.to(() => ModeloDetallePage(modelo: m)),
               borderRadius: BorderRadius.circular(14),
@@ -102,7 +107,7 @@ class _MisModelosSectionState extends State<MisModelosSection> {
                       color: Colors.black.withOpacity(0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
-                    )
+                    ),
                   ],
                 ),
                 child: Column(
@@ -111,28 +116,41 @@ class _MisModelosSectionState extends State<MisModelosSection> {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(14)),
+                          top: Radius.circular(14),
+                        ),
                         child: Image.network(
                           imageUrl,
                           fit: BoxFit.cover,
                           width: double.infinity,
                           errorBuilder: (_, __, ___) => const Icon(
-                              Icons.broken_image, size: 40, color: Colors.grey),
+                            Icons.broken_image,
+                            size: 40,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 6,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("ID #${m['id']}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14)),
+                          Text(
+                            "ID #${m['id']}",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                           Text(
                             "Creado: ${m['created_at'].toString().split('T').first}",
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),

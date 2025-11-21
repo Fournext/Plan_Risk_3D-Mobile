@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 
+
+//importacion de la constantes
+import '../../../../const/app_constants.dart';
+
+
 class ModeloDetallePage extends StatelessWidget {
   final Map<String, dynamic> modelo;
   const ModeloDetallePage({super.key, required this.modelo});
@@ -9,7 +14,7 @@ class ModeloDetallePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final baseUrl = "http://10.0.2.2:8000";
+    final baseUrl = '${AppConstants.baseUrlPacht}';
     final glbUrl = "$baseUrl${modelo['glb_model']}";
     final planImg = "$baseUrl${modelo['plan_image']}";
 

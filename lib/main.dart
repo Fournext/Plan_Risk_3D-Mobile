@@ -8,14 +8,21 @@ import 'config/app_themes.dart';
 import 'config/theme_controller.dart';
 import 'routes/routes.dart';
 
+// -- importacion de las constantes
+import 'const/app_constants.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
   Get.put(ThemeController());
 
-  const baseUrl = 'http://10.0.2.2:8000/'; // dispositivo físico
+  //const baseUrl = 'http://10.13.114.28:8000/'; // dispositivo físico
   //const baseUrl = 'http://ec2-18-222-5-143.us-east-2.compute.amazonaws.com:8000/';
+
+  // aqui esta el general
+  const baseUrl = AppConstants.baseUrl;
+
   Get.put(AuthController(baseUrl: baseUrl), permanent: true);
 
   runApp(const App());

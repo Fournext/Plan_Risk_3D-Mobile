@@ -67,28 +67,9 @@ class ConfigOptionsCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                     AnimatedOption(
-                      icon: Icons.dark_mode,
-                      label: 'Modo Oscuro',
-                      onTap: () {
-    Get.find<ThemeController>().toggleTheme(); // 👈 esto activa el cambio
-  },
-                    ),
+                 
+                   
                     const Divider(height: 1),
-                    AnimatedOption(
-                      icon: Icons.notifications,
-                      label: 'Plan Premium',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const PlanPremiumScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const Divider(height: 1),
-                    const AnimatedOption(icon: Icons.language, label: 'Idioma'),
                     const Divider(height: 1),
                     AnimatedOption(
                       icon: Icons.help_outline,

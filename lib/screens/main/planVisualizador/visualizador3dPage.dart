@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+
+
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class Visualizador3dPage extends StatefulWidget {
@@ -37,6 +40,8 @@ class _Visualizador3dPageState extends State<Visualizador3dPage> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final srcToShow = _glbUrl ?? _defaultModel;
@@ -45,27 +50,27 @@ class _Visualizador3dPageState extends State<Visualizador3dPage> {
       backgroundColor: const Color(0xFFFAF8F4),
 
       // ======= AppBar =======
-appBar: AppBar(
-  backgroundColor: const Color(0xFFFFF8F0),
-  elevation: 2,
-  iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
-  centerTitle: true,
-  title: const Row(
-    mainAxisSize: MainAxisSize.min, // 🔥 Esto es la clave
-    children: [
-      Icon(Icons.view_in_ar_rounded, color: Color(0xFFDC5F00)),
-      SizedBox(width: 6),
-      Text(
-        "Visualizador 3D - Plan Risk Studio",
-        style: TextStyle(
-          color: Color(0xFF1E293B),
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFFF8F0),
+        elevation: 2,
+        iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
+        centerTitle: true,
+        title: const Row(
+          mainAxisSize: MainAxisSize.min, // 🔥 Esto es la clave
+          children: [
+            Icon(Icons.view_in_ar_rounded, color: Color(0xFFDC5F00)),
+            SizedBox(width: 6),
+            Text(
+              "Visualizador 3D - Plan Risk Studio",
+              style: TextStyle(
+                color: Color(0xFF1E293B),
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ],
         ),
       ),
-    ],
-  ),
-),
 
 
       // ======= Cuerpo =======
@@ -80,10 +85,12 @@ appBar: AppBar(
               height: 160,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/banner_dashboard.png'),
-                  fit: BoxFit.cover,
-                ),
+                // Nota: Asegúrate de que esta ruta de imagen sea correcta
+                // image: const DecorationImage(
+                //   image: AssetImage('assets/images/banner_dashboard.png'),
+                //   fit: BoxFit.cover,
+                // ),
+                color: const Color(0xFFDC5F00).withOpacity(0.1), // Placeholder si la imagen no existe
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -227,14 +234,14 @@ appBar: AppBar(
                       Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
+                          children: [
                             Icon(Icons.view_in_ar_rounded,
-                                size: 80, color: Color(0xFFDC5F00)),
-                            SizedBox(height: 14),
+                                size: 80, color: Color(0xFFDC5F00).withOpacity(_isLoading ? 0 : 1)),
+                            const SizedBox(height: 14),
                             Text(
                               "Tu modelo 3D aparecerá aquí",
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: Colors.black54.withOpacity(_isLoading ? 0 : 1),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -242,6 +249,8 @@ appBar: AppBar(
                           ],
                         ),
                       ),
+
+
                   ],
                 ),
               ),

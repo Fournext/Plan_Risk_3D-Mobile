@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_plan_risk_3d/screens/dasboard/models/model3d_model.dart';
 
 class ModelCard extends StatelessWidget {
-  const ModelCard({
-    super.key,
-    required this.model,
-    required this.onTap,
-  });
+  const ModelCard({super.key, required this.model, required this.onTap});
 
   final Model3D model;
   final VoidCallback onTap;

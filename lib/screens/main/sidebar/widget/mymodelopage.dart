@@ -60,7 +60,6 @@ class _MyModeloPageState extends State<MyModeloPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FD),
       appBar: AppBar(

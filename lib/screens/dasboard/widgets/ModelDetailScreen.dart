@@ -49,10 +49,7 @@ class ModelDetailScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   model.dateText,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(color: Colors.black54, fontSize: 15),
                 ),
               ],
             ),
@@ -95,7 +92,10 @@ class ModelDetailScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: const Icon(Icons.auto_awesome_rounded, color: Colors.white),
+                icon: const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Colors.white,
+                ),
                 label: const Text(
                   "Ver Detalles Avanzados",
                   style: TextStyle(
@@ -106,8 +106,10 @@ class ModelDetailScreen extends StatelessWidget {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFDC5F00),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),

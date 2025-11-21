@@ -13,7 +13,6 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final items = <ModelInfo>[
       ModelInfo(
         title: 'Edificio Principal',
@@ -21,17 +20,14 @@ class DashboardScreen extends StatelessWidget {
         thumbnailAsset: 'assets/images/model_office.png',
         glbUrl: 'assets/models/edificio.glb',
       ),
-
-
     ];
-
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8F4),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           children: [
-            // ===== Banner superior =====
+            ///  Banner superior 
             Container(
               height: 160,
               decoration: BoxDecoration(
@@ -46,7 +42,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // Imagen de fondo
+                  /// Imagen de fondo
                   Positioned.fill(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(24),
@@ -56,7 +52,7 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Gradiente de superposición
+                  /// Gradiente de superposición
                   Positioned.fill(
                     child: Container(
                       decoration: BoxDecoration(

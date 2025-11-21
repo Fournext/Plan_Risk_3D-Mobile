@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: 260,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                  colors: [Color(0xFFDC5F00), Color(0xFFFFE5C4)],
+                colors: [Color(0xFFDC5F00), Color(0xFFFFE5C4)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -110,22 +110,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: OutlinedButton.icon(
                                     onPressed: () =>
                                         _showEditDialog(context, auth),
-                                    icon: const Icon(Icons.edit,
-                                        color: Color(0xFFDC5F00)),
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Color(0xFFDC5F00),
+                                    ),
                                     label: const Text(
                                       'Editar',
                                       style: TextStyle(
-                                          color: Color(0xFFDC5F00),
-                                          fontWeight: FontWeight.bold),
+                                        color: Color(0xFFDC5F00),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     style: OutlinedButton.styleFrom(
                                       side: const BorderSide(
-                                          color: Color(0xFFDC5F00), width: 1.6),
+                                        color: Color(0xFFDC5F00),
+                                        width: 1.6,
+                                      ),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 14),
+                                        vertical: 14,
+                                      ),
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -133,21 +139,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Expanded(
                                   child: ElevatedButton.icon(
                                     onPressed: () => auth.logout(),
-                                    icon: const Icon(Icons.logout,
-                                        color: Colors.white),
+                                    icon: const Icon(
+                                      Icons.logout,
+                                      color: Colors.white,
+                                    ),
                                     label: const Text(
                                       'Salir',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFDC5F00),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 14),
+                                        vertical: 14,
+                                      ),
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                       elevation: 6,
                                     ),
                                   ),
@@ -160,24 +170,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // ==== Mensaje de seguridad ====
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 18, vertical: 14),
+                                horizontal: 18,
+                                vertical: 14,
+                              ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFF5EE),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
-                                    color: const Color(0xFFDC5F00), width: 1.2),
+                                  color: const Color(0xFFDC5F00),
+                                  width: 1.2,
+                                ),
                               ),
                               child: Row(
                                 children: const [
-                                  Icon(Icons.shield_rounded,
-                                      color: Color(0xFFDC5F00)),
+                                  Icon(
+                                    Icons.shield_rounded,
+                                    color: Color(0xFFDC5F00),
+                                  ),
                                   SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
                                       'Tus datos están protegidos con seguridad avanzada 🔒',
                                       style: TextStyle(
-                                          fontSize: 13.5,
-                                          color: Color(0xFF1E293B)),
+                                        fontSize: 13.5,
+                                        color: Color(0xFF1E293B),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -193,15 +210,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4,
-                            ),
+                            border: Border.all(color: Colors.white, width: 4),
                           ),
                           child: CircleAvatar(
                             radius: 60,
-                            backgroundColor:
-                                const Color(0xFFDC5F00).withOpacity(.2),
+                            backgroundColor: const Color(
+                              0xFFDC5F00,
+                            ).withOpacity(.2),
                             child: ClipOval(
                               child: Image.asset(
                                 'assets/images/avatar.png',
@@ -254,17 +269,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Text(
                   'Editar Perfil',
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Color(0xFF1E293B)),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Color(0xFF1E293B),
+                  ),
                 ),
               ),
               const SizedBox(height: 18),
-              _FancyField(controller: nameCtrl, label: 'Nombre', icon: Icons.person),
+              _FancyField(
+                controller: nameCtrl,
+                label: 'Nombre',
+                icon: Icons.person,
+              ),
               const SizedBox(height: 12),
-              _FancyField(controller: emailCtrl, label: 'Correo', icon: Icons.email),
+              _FancyField(
+                controller: emailCtrl,
+                label: 'Correo',
+                icon: Icons.email,
+              ),
               const SizedBox(height: 12),
-              _FancyField(controller: passCtrl, label: 'Contraseña nueva', icon: Icons.lock),
+              _FancyField(
+                controller: passCtrl,
+                label: 'Contraseña nueva',
+                icon: Icons.lock,
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
@@ -278,12 +306,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: const Color(0xFFDC5F00),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: const Text(
                   'Guardar cambios',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

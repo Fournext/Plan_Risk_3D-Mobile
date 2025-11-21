@@ -48,8 +48,11 @@ class Sidebar extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Icon(Icons.home_work_outlined,
-                    color: Colors.white, size: 24),
+                child: const Icon(
+                  Icons.home_work_outlined,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 10),
               Text(
@@ -146,28 +149,35 @@ class _SidebarItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
           decoration: BoxDecoration(
-            color: isSelected ? accentColor.withOpacity(0.12) : Colors.transparent,
+            color: isSelected
+                ? accentColor.withOpacity(0.12)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
             children: [
-              Icon(icon,
-                  color: isSelected ? accentColor : Colors.grey[800], size: 22),
+              Icon(
+                icon,
+                color: isSelected ? accentColor : Colors.grey[800],
+                size: 22,
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   label,
                   style: TextStyle(
                     color: isSelected ? accentColor : Colors.grey[800],
-                    fontWeight:
-                        isSelected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                     fontSize: 15,
                   ),
                 ),
               ),
               if (isSelected)
-                const Icon(Icons.chevron_right_rounded,
-                    color: Colors.black45, size: 20),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.black45,
+                  size: 20,
+                ),
             ],
           ),
         ),

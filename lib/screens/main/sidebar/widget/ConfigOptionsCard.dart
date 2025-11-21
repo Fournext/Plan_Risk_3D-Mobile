@@ -67,8 +67,6 @@ class ConfigOptionsCard extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                 
-                   
                     const Divider(height: 1),
                     const Divider(height: 1),
                     AnimatedOption(

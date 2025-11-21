@@ -1,9 +1,9 @@
 // lib/screens/auth/models/user_model.dart
 class UserModel {
-  final int? id;            // <-- opcional (viene del backend)
-  final String nombre;      // requerido para registro / perfil
-  final String email;       // requerido
-  final String? password;   // <-- opcional (no regresa del backend)
+  final int? id;            ///  <-- opcional (viene del backend)
+  final String nombre;      /// requerido para registro / perfil
+  final String email;       /// requerido
+  final String? password;   /// <-- opcional (no regresa del backend)
 
   const UserModel({
     this.id,
@@ -30,6 +30,5 @@ class UserModel {
         id: json['id'] as int?,
         nombre: (json['nombre'] ?? '') as String,
         email: (json['email'] ?? '') as String,
-        // normalmente el backend NO devuelve password → mantenla null
       );
 }

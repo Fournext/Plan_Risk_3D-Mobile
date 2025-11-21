@@ -79,18 +79,6 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-            /*   CustomTextfield(
-                label: 'Confirmar contraseña',
-                prefixIcon: Icons.lock_outlined,
-                keyboardType: TextInputType.visiblePassword,
-                isPassword: true,
-                controller: _confirmPasswordController,
-                validator: (v) {
-                  if (v == null || v.isEmpty) return 'Confirma tu contraseña';
-                  if (v != _passwordController.text) return 'Las contraseñas no coinciden';
-                  return null;
-                },
-              ), */
               const SizedBox(height: 24),
 
               SizedBox(

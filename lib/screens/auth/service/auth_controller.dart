@@ -49,7 +49,7 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  // ---------- storage helpers ----------
+  /// ---------- storage helpers ----------
   String? get accessToken => _box.read('access');
   String? get refreshToken => _box.read('refresh');
 
@@ -66,7 +66,7 @@ class AuthController extends GetxController {
     _box.write('usuario', map); // guardamos como Map (GetStorage lo soporta)
   }
 
-  // ---------- API ----------
+  /// ---------- API ----------
   Future<void> register(UserModel user) async {
     try {
       isLoading.value = true;

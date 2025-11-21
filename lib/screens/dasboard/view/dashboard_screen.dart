@@ -182,7 +182,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const MisModelosSection(),
+              child:  MisModelosSection(),
             ),
           ],
         ),

@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
+import 'package:mobile_plan_risk_3d/screens/auth/controller/model_controller.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import '../../../../const/app_constants.dart';
 
@@ -41,102 +43,70 @@ class _IADisenoScreenState extends State<IADisenoScreen>
   }
 
   Future<void> _uploadPlan() async {
-    if (_selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('⚠️ Primero selecciona o toma una foto')),
+  if (_selectedImage == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('⚠️ Primero selecciona o toma una foto')),
+    );
+    return;
+  }
+
+  final user = _box.read('usuario');
+  if (user == null || user['id'] == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('⚠️ Usuario no encontrado')),
+    );
+    return;
+  }
+
+  setState(() {
+    _isLoading = true;
+    _glbUrl = null;
+  });
+
+  try {
+    var request = http.MultipartRequest('POST', Uri.parse(baseUrl))
+      ..fields['usuario'] = user['id'].toString()
+      ..files.add(
+        await http.MultipartFile.fromPath('plan_file', _selectedImage!.path),
       );
-      return;
-    }
 
-    final user = _box.read('usuario');
-    if (user == null || user['id'] == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('⚠️ Usuario no encontrado')));
-      return;
-    }
+    var response = await request.send();
+    var responseBody = await response.stream.bytesToString();
 
-    setState(() {
-      _isLoading = true;
-      _glbUrl = null; // limpiar visor hasta que llegue respuesta
-    });
+    if (response.statusCode == 201) {
+      final Map<String, dynamic> jsonResp = jsonDecode(responseBody);
 
-    try {
-      var request = http.MultipartRequest('POST', Uri.parse(baseUrl))
-        ..fields['usuario'] = user['id'].toString()
-        ..files.add(
-          await http.MultipartFile.fromPath('plan_file', _selectedImage!.path),
-        );
+      final dynamic glbField =
+          jsonResp['glb_model'] ?? jsonResp['glb'] ?? jsonResp['model_url'];
 
-      var response = await request.send();
-      var responseBody = await response.stream.bytesToString();
+      if (glbField != null && glbField is String && glbField.isNotEmpty) {
+        final fullUrl = glbField.startsWith('http')
+            ? glbField
+            : '${AppConstants.baseUrlPacht}$glbField';
 
-      // parsear JSON si es posible
-      if (response.statusCode == 201) {
-        try {
-          final Map<String, dynamic> jsonResp = jsonDecode(responseBody);
-          // Ajusta la clave según tu respuesta real
-          final dynamic glbField = jsonResp['glb_model'] ?? jsonResp['glb'] ?? jsonResp['model_url'];
+        setState(() => _glbUrl = fullUrl);
 
-          if (glbField != null && glbField is String && glbField.isNotEmpty) {
-            final fullUrl = glbField.startsWith('http')
-                ? glbField
-                : '${AppConstants.baseUrlPacht}$glbField';
+        // 🔥 AVISAR QUE HAY UN NUEVO MODELO
+        Get.find<ModelController>().notifyRefresh();
 
-            setState(() => _glbUrl = fullUrl);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('✅ Modelo generado correctamente')),
-            );
-          } else {
-            // fallback a regex si backend no responde en JSON esperado
-            final regex = RegExp(r'"glb_model"\s*:\s*"([^"]+)"');
-            final match = regex.firstMatch(responseBody);
-            if (match != null) {
-              final glbPath = match.group(1)!;
-              final fullUrl = '${AppConstants.baseUrlPacht}$glbPath';
-              setState(() => _glbUrl = fullUrl);
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ Modelo generado correctamente')),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('⚠️ No se encontró la URL del modelo en la respuesta')),
-              );
-            }
-          }
-        } catch (e) {
-          // si jsonDecode falla, intentar con regex
-          final regex = RegExp(r'"glb_model"\s*:\s*"([^"]+)"');
-          final match = regex.firstMatch(responseBody);
-          if (match != null) {
-            final glbPath = match.group(1)!;
-            final fullUrl = '${AppConstants.baseUrlPacht}$glbPath';
-            setState(() => _glbUrl = fullUrl);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('✅ Modelo generado correctamente')),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('⚠️ Respuesta inesperada: $responseBody')),
-            );
-          }
-        }
-      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al subir: ${response.statusCode}')),
+          const SnackBar(content: Text('✅ Modelo generado correctamente')),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('❌ Error: $e')));
-    } finally {
-      setState(() => _isLoading = false);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al subir: ${response.statusCode}')),
+      );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('❌ Error: $e')),
+    );
+  } finally {
+    setState(() => _isLoading = false);
   }
+}
+
 
   // Copiar al portapapeles
   Future<void> _copyToClipboard(String text, {String? label}) async {

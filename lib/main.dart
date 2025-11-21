@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mobile_plan_risk_3d/screens/auth/controller/model_controller.dart';
 import 'package:mobile_plan_risk_3d/screens/auth/service/auth_controller.dart';
 
 import 'config/app_themes.dart';
@@ -24,7 +25,7 @@ void main() async {
   const baseUrl = AppConstants.baseUrl;
 
   Get.put(AuthController(baseUrl: baseUrl), permanent: true);
-
+Get.put(ModelController()); // ⬅️ AÑADIR ESTO OBLIGATORIO
   runApp(const App());
 }
 
